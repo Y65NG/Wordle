@@ -30,7 +30,7 @@ body {
 }
 
 .block-green {
-    background-color: rgb(36, 143, 4);
+    background-color: rgb(35, 150, 89);
 }
 
 .block-red {
@@ -52,4 +52,25 @@ body {
     /* margin: 0; */
     /* padding: 0; */
     /* border: none; */
+}
+
+#end-div {
+    margin-top: 20px;
+}
+
+#end-info {
+    font-size: 2em;
+    font-weight: bold;
+    /* text-align: center; */
+    width: auto;
+    border-radius: 7px;
+    padding: 5px;
+}
+
+.info-win {
+    background-color: rgb(35, 150, 89);
+}
+
+.info-lose {
+    background-color: rgb(184, 47, 47);
 }

@@ -1,20 +1,18 @@
 // Model
-let secret = "secre";
-const guesses = [];
-const results = [];
-const keys = [];
+let secret = "secret";
+const keys = [[]];
 var Color;
 (function (Color) {
     Color[Color["Red"] = 0] = "Red";
     Color[Color["Yellow"] = 1] = "Yellow";
     Color[Color["Green"] = 2] = "Green";
+    Color[Color["None"] = 3] = "None";
 })(Color || (Color = {}));
 function guess(word) {
-    if (secret.length !== word.length) {
-        return false;
-    }
-    guesses.push(word);
     let result = [];
+    for (let i = 0; i < (secret.length - word.length); i++) {
+        word += "*";
+    }
     Array.from(secret).forEach((s, i) => {
         if (word[i] === s) {
             result.push(Color.Green);
@@ -22,36 +20,66 @@ function guess(word) {
         else if (secret.includes(word[i])) {
             result.push(Color.Yellow);
         }
+        else if (word[i] == "*") {
+            result.push(Color.None);
+        }
         else {
             result.push(Color.Red);
         }
     });
-    results.push(result);
-    return true;
+    return result;
+}
+function keysToWords(keys) {
+    let result = [];
+    for (let row of keys) {
+        result.push(row.join(""));
+    }
+    return result;
+}
+function isLetter(str) {
+    return str.length === 1 && str.toLowerCase() !== str.toUpperCase();
 }
 // Controller
-/* enter the word from textbox */
-function enterWord() {
-    const textbox = document.getElementById("textbox");
-    const word = textbox.value;
-    const textboxDiv = document.getElementById("textbox-div");
-    if (guess(word)) {
-        textbox.value = "";
-        if (document.getElementById("fail-to-enter-err") !== null) {
-            textboxDiv.removeChild(document.getElementById("fail-to-enter-err"));
+function startGame() {
+    const table = document.getElementById("table");
+    table.innerHTML = "";
+    for (let i = 0; i < ENTRYNUMBER; i++) {
+        const entry = document.createElement("div");
+        entry.className = "entry";
+        for (let j = 0; j < WORDLENGTH; j++) {
+            const block = document.createElement("p");
+            block.className = "block";
+            entry.appendChild(block);
         }
+        table.appendChild(entry);
     }
-    else {
-        if (document.getElementById("fail-to-enter-err") === null) {
-            textboxDiv.innerHTML += `<p id="fail-to-enter-err">Fail to enter the word!</p>`;
-        }
-    }
-    render();
+    document.addEventListener("keydown", render);
 }
 // View
 const ENTRYNUMBER = 6;
-const WORDLENGTH = 5;
-function render() {
+const WORDLENGTH = secret.length;
+let editingIndex = 0;
+let gameStatus = false;
+function render(event) {
+    const key = event.key;
+    // console.log(key);
+    if (isLetter(key)) {
+        if (keys[editingIndex].length < WORDLENGTH) {
+            keys[editingIndex].push(key);
+        }
+    }
+    else if (key == "Backspace") {
+        keys[editingIndex].pop();
+    }
+    else if (key == "Enter") {
+        if (keys[editingIndex].length === WORDLENGTH) {
+            keys.push([]);
+            editingIndex += 1;
+        }
+    }
+    const guesses = keysToWords(keys);
+    const results = guesses.map((word) => guess(word));
+    // console.log(guesses, results);
     const table = document.getElementById("table");
     table.innerHTML = "";
     for (let i = 0; i < ENTRYNUMBER; i++) {
@@ -62,31 +90,44 @@ function render() {
         if (i < guesses.length) {
             guess = guesses[i];
             colors = results[i];
+            if (JSON.stringify(colors) === JSON.stringify(Array(WORDLENGTH).fill(Color.Green))) {
+                gameStatus = true;
+            }
         }
         for (let j = 0; j < WORDLENGTH; j++) {
             const block = document.createElement("p");
             block.className = "block";
-            console.log(j);
             if (guess !== null && colors !== null) {
                 let letter = guess[j];
                 let color = colors[j];
-                console.log(letter);
                 block.textContent = letter;
-                switch (color) {
-                    case Color.Green:
-                        block.className = "block-green";
-                        break;
-                    case Color.Yellow:
-                        block.className = "block-yellow";
-                        break;
-                    default:
-                        block.className = "block-red";
-                        break;
+                if (i < editingIndex) {
+                    switch (color) {
+                        case Color.Green:
+                            block.className = "block-green";
+                            break;
+                        case Color.Yellow:
+                            block.className = "block-yellow";
+                            break;
+                        case Color.Red:
+                            block.className = "block-red";
+                            break;
+                    }
                 }
             }
             entry.appendChild(block);
         }
         table.appendChild(entry);
+        const endInfo = document.getElementById("end-info");
+        if (key === "Enter") {
+            if (gameStatus) {
+                endInfo.className = "info-win";
+                endInfo.textContent = `Congradulations! The secret word is "${secret}"`;
+            }
+            else if (editingIndex === ENTRYNUMBER) {
+                endInfo.className = "info-lose";
+                endInfo.textContent = `You lose.`;
+            }
+        }
     }
 }
-render();
