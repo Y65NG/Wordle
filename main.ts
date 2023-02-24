@@ -73,10 +73,11 @@ let editingIndex = 0;
 let gameStatus = false;
 
 function render(event: KeyboardEvent) {
-    const key = event.key;
+    let key = event.key;
     // console.log(key);
 
     if (isLetter(key)) {
+        key = key.toLowerCase();
         if (keys[editingIndex].length < WORDLENGTH) {
             keys[editingIndex].push(key);
         }
