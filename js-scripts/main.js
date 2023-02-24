@@ -1,5 +1,18 @@
+// Process Word List
+// declare function require(name: string);
+// let fs = require('fs');
+// const fileName = "answerlist.txt";
+// const fileContent = fs.readFileSync(fileName, "utf-8");
+// const wordList = fileContent.split("\n");
+// console.log(wordList);
+// let obj = {
+//     words: wordList
+// }
+// let json = JSON.stringify(obj);
+// fs.writeFileSync("data.json", json);
+// let data = JSON.parse()
 // Model
-let secret = "secret";
+let secret = wordList[Math.floor(Math.random() * wordList.length)];
 const keys = [[]];
 var Color;
 (function (Color) {
@@ -55,8 +68,9 @@ function startGame() {
     }
     document.addEventListener("keydown", render);
 }
+// document.addEventListener("click", startGame);
 // View
-const ENTRYNUMBER = 6;
+const ENTRYNUMBER = 8;
 const WORDLENGTH = secret.length;
 let editingIndex = 0;
 let gameStatus = false;
@@ -127,7 +141,7 @@ function render(event) {
             }
             else if (editingIndex === ENTRYNUMBER) {
                 endInfo.className = "info-lose";
-                endInfo.textContent = `You lose.`;
+                endInfo.textContent = `You lose. The secret word is "${secret}"`;
             }
         }
     }
