@@ -10,14 +10,15 @@
   </head>
 
   <body>
-    <h1>Wordle</h1>
+    <h1><span id="title">Wordle</span></h1>
     <div id="table">
-      <button onclick="startGame()">Start Game!</button>
+      <button id="start-btn" onclick="startGame()">Start Game!</button>
     </div>
 
     <div id="end-div">
       <span id="end-info" class="info"></span>
     </div>
+    <div id="restart-div"></div>
 
     <script src="toefl.js"></script>
     <script src=" js-scripts/main.js"></script>

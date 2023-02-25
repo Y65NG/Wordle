@@ -7,7 +7,7 @@ wordList = wordList.filter((word) => {
 });
 console.log(wordList.length);
 let secret = wordList[Math.floor(Math.random() * wordList.length)];
-const keys = [[]];
+let keys = [[]];
 var Color;
 (function (Color) {
     Color[Color["Red"] = 0] = "Red";
@@ -15,6 +15,11 @@ var Color;
     Color[Color["Green"] = 2] = "Green";
     Color[Color["None"] = 3] = "None";
 })(Color || (Color = {}));
+function init() {
+    secret = wordList[Math.floor(Math.random() * wordList.length)];
+    keys = [[]];
+    editingIndex = 0;
+}
 function guess(word) {
     let result = [];
     for (let i = 0; i < (secret.length - word.length); i++) {
@@ -60,12 +65,26 @@ function startGame() {
         }
         table.appendChild(entry);
     }
+    // const restartBtn = document.createElement("button");
+    // const restartDiv = document.getElementById("restart-div")!;
+    // const endInfo = document.getElementById("end-info")!;
+    // restartBtn.id = "restart-btn";
+    // restartBtn.addEventListener("click", function () {
+    //     restartDiv.innerHTML = "";
+    //     endInfo.innerHTML = "";
+    //     endInfo.className = "info";
+    //     gameStatus = false;
+    //     init();
+    //     startGame();
+    // })
+    // restartBtn.textContent = "Restart";
+    // restartDiv.appendChild(restartBtn);
     document.addEventListener("keydown", render);
 }
 // document.addEventListener("click", startGame);
 // View
 const WORDLENGTH = secret.length;
-const ENTRYNUMBER = WORDLENGTH + 4;
+const ENTRYNUMBER = WORDLENGTH + 3;
 let editingIndex = 0;
 let gameStatus = false;
 function render(event) {

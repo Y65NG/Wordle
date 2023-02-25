@@ -15,7 +15,7 @@ console.log(wordList.length);
 
 let secret = wordList[Math.floor(Math.random() * wordList.length)];
 
-const keys: string[][] = [[]];
+let keys: string[][] = [[]];
 
 enum Color {
     Red,
@@ -24,7 +24,12 @@ enum Color {
     None,
 }
 
+function init() {
+    secret = wordList[Math.floor(Math.random() * wordList.length)];
+    keys = [[]];
+    editingIndex = 0;
 
+}
 
 function guess(word: string): number[] {
     let result: number[] = [];
@@ -65,6 +70,7 @@ function isLetter(str: string): boolean {
 function startGame() {
     const table = document.getElementById("table")!;
     table.innerHTML = "";
+
     for (let i = 0; i < ENTRYNUMBER; i++) {
         const entry = document.createElement("div");
         entry.className = "entry";
@@ -76,6 +82,21 @@ function startGame() {
         }
         table.appendChild(entry);
     }
+    // const restartBtn = document.createElement("button");
+    // const restartDiv = document.getElementById("restart-div")!;
+    // const endInfo = document.getElementById("end-info")!;
+    // restartBtn.id = "restart-btn";
+    // restartBtn.addEventListener("click", function () {
+    //     restartDiv.innerHTML = "";
+    //     endInfo.innerHTML = "";
+    //     endInfo.className = "info";
+    //     gameStatus = false;
+    //     init();
+    //     startGame();
+    // })
+    // restartBtn.textContent = "Restart";
+    // restartDiv.appendChild(restartBtn);
+
     document.addEventListener("keydown", render);
 }
 
@@ -84,7 +105,7 @@ function startGame() {
 
 // View
 const WORDLENGTH = secret.length;
-const ENTRYNUMBER = WORDLENGTH + 4;
+const ENTRYNUMBER = WORDLENGTH + 3;
 
 let editingIndex = 0;
 let gameStatus = false;
@@ -154,6 +175,8 @@ function render(event: KeyboardEvent) {
             entry.appendChild(block);
         }
         table.appendChild(entry);
+
+
 
         const endInfo = document.getElementById("end-info")!;
         if (key === "Enter") {
