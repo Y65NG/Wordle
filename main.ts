@@ -1,21 +1,19 @@
 
 // Process Word List
 // declare function require(name: string);
-// let fs = require('fs');
-// const fileName = "answerlist.txt";
-// const fileContent = fs.readFileSync(fileName, "utf-8");
-// const wordList = fileContent.split("\n");
-// console.log(wordList);
-// let obj = {
-//     words: wordList
-// }
-// let json = JSON.stringify(obj);
-// fs.writeFileSync("data.json", json);
+
 // let data = JSON.parse()
 
-// Model
-let secret = wordList[Math.floor(Math.random() * wordList.length)];
 
+
+
+// Model
+wordList = wordList.filter((word) => {
+    return word.length > 3 && word.length < 7;
+})
+console.log(wordList.length);
+
+let secret = wordList[Math.floor(Math.random() * wordList.length)];
 
 const keys: string[][] = [[]];
 
@@ -85,8 +83,8 @@ function startGame() {
 
 
 // View
-const ENTRYNUMBER = 8;
 const WORDLENGTH = secret.length;
+const ENTRYNUMBER = WORDLENGTH + 4;
 
 let editingIndex = 0;
 let gameStatus = false;
